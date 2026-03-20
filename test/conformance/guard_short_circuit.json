@@ -1,0 +1,36 @@
+{
+  "spec_version": "0.1.0",
+  "name": "guard_short_circuit",
+  "description": "Proves guards run in declaration order and short-circuit on the first false. Transition guards = [record_a, record_c_then_false, record_b]; the harness log must equal \"ac\" after the rejected dispatch (b never invoked).",
+  "machine": {
+    "states": [
+      { "id": 0, "name": "s0", "parent": null, "initial_child": null, "depth": 0 },
+      { "id": 1, "name": "s1", "parent": null, "initial_child": null, "depth": 0 }
+    ],
+    "events": [
+      { "id": 0, "name": "go", "transitions": [
+        { "ordinal": 0, "sources": [0], "target": 1,
+          "guards": ["record_a", "record_c_then_false", "record_b"] }
+      ]}
+    ],
+    "guards": ["record_a", "record_c_then_false", "record_b"],
+    "initial": 0
+  },
+  "trace": [
+    {
+      "step": 1,
+      "dispatch": { "event": 0, "payload": null },
+      "expect": {
+        "result": "EOPNOTSUPP",
+        "outcome": "GUARD_FAILED",
+        "current": 0,
+        "generation": 0,
+        "transition_index": 0,
+        "guard_ordinal": 1,
+        "guard_id": 1,
+        "transitions_tested": 1,
+        "log": "ac"
+      }
+    }
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "spec_version": "0.1.0",
+  "target": "x86_64-lp64",
+  "description": "Expected sizes and offsets of public ABI types for x86_64 with LP64 ABI (FreeBSD/DragonFly amd64, Linux x86_64).",
+  "types": {
+    "state_machine_state_def_t": {
+      "size": 16,
+      "offsets": {
+        "id": 0,
+        "parent": 2,
+        "initial_child": 4,
+        "depth": 6,
+        "flags": 7,
+        "name": 8
+      }
+    },
+    "state_machine_transition_def_t": {
+      "size": 32,
+      "offsets": {
+        "sources": 0,
+        "guards": 8,
+        "target": 16,
+        "source_count": 18,
+        "guard_count": 20,
+        "action": 22,
+        "ordinal": 24,
+        "flags": 26,
+        "_reserved": 27
+      }
+    },
+    "state_machine_event_def_t": {
+      "size": 24,
+      "offsets": {
+        "id": 0,
+        "transition_count": 2,
+        "transitions": 8,
+        "name": 16
+      }
+    },
+    "state_machine_guard_def_t": {
+      "size": 16,
+      "offsets": {
+        "fn": 0,
+        "name": 8
+      }
+    },
+    "state_machine_action_def_t": {
+      "size": 16,
+      "offsets": {
+        "fn": 0,
+        "name": 8
+      }
+    },
+    "state_machine_def_t": {
+      "size": 72,
+      "offsets": {
+        "magic": 0,
+        "abi_epoch": 4,
+        "abi_revision": 6,
+        "struct_size": 8,
+        "flags": 10,
+        "spec_version": 12,
+        "_reserved": 14,
+        "name": 16,
+        "states": 24,
+        "events": 32,
+        "guards": 40,
+        "actions": 48,
+        "state_count": 56,
+        "initial": 58,
+        "event_count": 60,
+        "guard_count": 62,
+        "action_count": 64
+      }
+    },
+    "state_machine_t": {
+      "size": 32,
+      "offsets": {
+        "def": 0,
+        "userdata": 8,
+        "generation": 16,
+        "current": 24,
+        "_dispatch_flag": 26,
+        "_reserved": 28
+      }
+    },
+    "state_machine_result_t": {
+      "size": 32,
+      "offsets": {
+        "outcome": 0,
+        "from": 4,
+        "to": 6,
+        "event": 8,
+        "transition_index": 10,
+        "guard_ordinal": 12,
+        "guard_id": 14,
+        "action_id": 16,
+        "transitions_tested": 18,
+        "generation_after": 24
+      }
+    }
+  }
+}

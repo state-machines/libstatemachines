@@ -1,0 +1,56 @@
+{
+  "spec_version": "0.1.0",
+  "name": "hsm_source_expansion",
+  "description": "Two-level hierarchy: root -> active -> {run, idle}. Event 'stop' lists sources=[active]. Current state is run (a descendant of active). Source expansion must match and transition to leaf 'done'.",
+  "machine": {
+    "states": [
+      { "id": 0, "name": "root",   "parent": null, "initial_child": 1, "depth": 0 },
+      { "id": 1, "name": "active", "parent": 0,    "initial_child": 2, "depth": 1 },
+      { "id": 2, "name": "run",    "parent": 1,    "initial_child": null, "depth": 2 },
+      { "id": 3, "name": "idle",   "parent": 1,    "initial_child": null, "depth": 2 },
+      { "id": 4, "name": "done",   "parent": 0,    "initial_child": null, "depth": 1 }
+    ],
+    "events": [
+      { "id": 0, "name": "stop", "transitions": [
+        { "ordinal": 0, "sources": [1], "target": 4, "guards": [] }
+      ]},
+      { "id": 1, "name": "reset", "transitions": [
+        { "ordinal": 0, "sources": [4], "target": 1, "guards": [] }
+      ]}
+    ],
+    "guards": [],
+    "initial": 2
+  },
+  "trace": [
+    {
+      "step": 1,
+      "comment": "source expansion: current=run is a descendant of active, so 'stop' (sources=[active]) matches and we land in 'done'.",
+      "dispatch": { "event": 0, "payload": null },
+      "expect": {
+        "result": 0,
+        "outcome": "ACCEPTED",
+        "current": 4,
+        "generation": 1,
+        "transition_index": 0,
+        "guard_ordinal": 65535,
+        "guard_id": 65535,
+        "transitions_tested": 1
+      }
+    },
+    {
+      "step": 2,
+      "comment": "target descent: 'reset' target=active descends through initial_child to 'run'.",
+      "dispatch": { "event": 1, "payload": null },
+      "expect": {
+        "result": 0,
+        "outcome": "ACCEPTED",
+        "current": 2,
+        "generation": 2,
+        "transition_index": 0,
+        "guard_ordinal": 65535,
+        "guard_id": 65535,
+        "transitions_tested": 1
+      }
+    }
+  ]
+}

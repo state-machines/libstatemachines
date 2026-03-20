@@ -1,0 +1,65 @@
+name: ci
+
+on:
+  pull_request: {}
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # --- Build + test ------------------------------------------------------------
+  test:
+    name: Test - ${{ matrix.cc }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      CC: ${{ matrix.cc }}
+    strategy:
+      fail-fast: false
+      matrix:
+        cc: [gcc, clang]
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install toolchain
+        shell: bash
+        run: |
+          set -euo pipefail
+          if command -v apt-get >/dev/null 2>&1; then
+            sudo apt-get update -y
+            sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+              build-essential clang make
+          fi
+
+      - name: Compiler version
+        run: ${CC} --version
+
+      - name: Build (library profile)
+        run: make CC=${CC}
+
+      - name: Smoke tests
+        run: make CC=${CC} test
+
+      - name: Reference consumer
+        run: make CC=${CC} example
+
+      - name: Conformance corpus
+        run: make CC=${CC} conformance
+
+  # --- Required status check ---------------------------------------------------
+  results:
+    name: CI results (required)
+    needs: [test]
+    if: always()
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Summarize
+        shell: bash
+        run: |
+          echo "test: ${{ needs.test.result }}"
+          [[ '${{ needs.test.result }}' == 'success' ]] || { echo 'tests failed'; exit 1; }

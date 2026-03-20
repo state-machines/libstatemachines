@@ -1,0 +1,65 @@
+{
+  "spec_version": "0.1.0",
+  "name": "airlock",
+  "description": "Two-state flat machine. Demonstrates dispatch acceptance and EOPNOTSUPP rejection on a no-source-match.",
+  "machine": {
+    "states": [
+      { "id": 0, "name": "pressurized", "parent": null, "initial_child": null, "depth": 0 },
+      { "id": 1, "name": "vacuum",      "parent": null, "initial_child": null, "depth": 0 }
+    ],
+    "events": [
+      { "id": 0, "name": "depressurize", "transitions": [
+        { "ordinal": 0, "sources": [0], "target": 1, "guards": [] }
+      ]},
+      { "id": 1, "name": "repressurize", "transitions": [
+        { "ordinal": 0, "sources": [1], "target": 0, "guards": [] }
+      ]}
+    ],
+    "guards": [],
+    "initial": 0
+  },
+  "trace": [
+    {
+      "step": 1,
+      "dispatch": { "event": 0, "payload": null },
+      "expect": {
+        "result": 0,
+        "outcome": "ACCEPTED",
+        "current": 1,
+        "generation": 1,
+        "transition_index": 0,
+        "guard_ordinal": 65535,
+        "guard_id": 65535,
+        "transitions_tested": 1
+      }
+    },
+    {
+      "step": 2,
+      "dispatch": { "event": 0, "payload": null },
+      "expect": {
+        "result": "EOPNOTSUPP",
+        "outcome": "NO_TRANSITION",
+        "current": 1,
+        "generation": 1,
+        "transition_index": 65535,
+        "guard_ordinal": 65535,
+        "guard_id": 65535,
+        "transitions_tested": 1
+      }
+    },
+    {
+      "step": 3,
+      "dispatch": { "event": 1, "payload": null },
+      "expect": {
+        "result": 0,
+        "outcome": "ACCEPTED",
+        "current": 0,
+        "generation": 2,
+        "transition_index": 0,
+        "guard_ordinal": 65535,
+        "guard_id": 65535,
+        "transitions_tested": 1
+      }
+    }
+  ]
+}
