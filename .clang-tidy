@@ -1,0 +1,8 @@
+Checks: >
+  -*,
+  clang-analyzer-*,
+  bugprone-*,
+  portability-*,
+  -bugprone-easily-swappable-parameters
+WarningsAsErrors: '*'
+HeaderFilterRegex: '(include|src)/'
