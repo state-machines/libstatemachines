@@ -15,10 +15,22 @@
 #ifndef STATE_MACHINE_SCHEMA_H
 #define STATE_MACHINE_SCHEMA_H
 
-#include <stdint.h>
-#include <stdbool.h>
-#include <stddef.h>
-#include <errno.h>
+/*
+ * By default the standard headers are used. Define STATE_MACHINE_FREESTANDING
+ * to instead pull a caller-provided <state_machine_port.h>, letting the library
+ * build in environments without a standard library.
+ */
+#if defined(STATE_MACHINE_FREESTANDING)
+#  include <state_machine_port.h> /* must define uint8_t..uint64_t, bool/true/false,
+                                     size_t, offsetof, UINT16_MAX, and the
+                                     EINVAL/EBUSY/EPROTO/EOPNOTSUPP constants.
+                                     A reference port ships in ports/. */
+#else
+#  include <stdint.h>
+#  include <stdbool.h>
+#  include <stddef.h>
+#  include <errno.h>
+#endif
 
 #ifdef __cplusplus
 extern "C" {
